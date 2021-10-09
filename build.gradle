@@ -1,0 +1,38 @@
+plugins {
+    id 'java'
+}
+
+group 'com.gamepub'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    testImplementation(platform('org.junit:junit-bom:5.8.1'))
+    testImplementation('org.junit.jupiter:junit-jupiter')
+
+    compile 'org.projectlombok:lombok:1.18.20'
+    annotationProcessor 'org.projectlombok:lombok:1.18.20'
+
+    compile group: 'com.opencsv', name: 'opencsv', version: '5.5.2'
+    compile group: 'commons-io', name: 'commons-io', version: '2.11.0'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.0'
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+    }
+}
+
+task copyFiles(type: Copy) {
+    from 'src/main/java'
+    into 'build/classes/java/main'
+    include '**/*.csv'
+    include '**/*.png'
+}
+
+processResources.dependsOn(copyFiles)
